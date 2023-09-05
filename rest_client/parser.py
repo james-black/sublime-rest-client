@@ -1,6 +1,8 @@
 import re
 from typing import List, Mapping, Optional, Tuple
 
+import sublime
+
 from .request import Request
 
 BOUNDARY = "###"
@@ -12,7 +14,7 @@ class ParserError(Exception):
     pass
 
 
-def parse(contents: str, pos: int) -> Request:
+def parse(view: sublime.View) -> Request:
     """
     Constructs a Request object from the contents of the view and the position
     of the cursor in it.
@@ -39,9 +41,11 @@ def parse(contents: str, pos: int) -> Request:
     }
 
     """
+    contents = view.substr(sublime.Region(0, view.size()))
+    position = view.sel()[0].begin()
     try:
         variables = _get_variables(contents)
-        block = _get_request_block(contents, pos)
+        block = _get_request_block(contents, position)
         block = _apply_variable_substitution(block, variables)
         return _parse_request_block(block)
     except ValueError as exc:
