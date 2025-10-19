@@ -4,4 +4,6 @@
     // Format JSON responses parameters, only relevant if `format_json` is true
     "format_json_indent": 2,
     "format_json_sort_keys": true,
+    // Where the response should be shown, either `file` or `panel`
+    "response_view": "file",
 }
